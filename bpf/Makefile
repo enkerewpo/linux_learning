@@ -21,7 +21,11 @@ vmlinux.h:
 	bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
 
 disasm: $(BPF_OBJS)
-	$(foreach obj, $(BPF_OBJS), llvm-objdump -S -d $(obj) > $(obj).disasm;)
+	$(foreach obj, $(BPF_OBJS), llvm-objdump -S -D $(obj) > $(obj).disasm;)
 
 clean:
 	rm -f $(BPF_OBJS)
+
+run:
+	sudo rm -rf /sys/fs/bpf/main
+	sudo bpftool prog load main.bpf.o /sys/fs/bpf/main
