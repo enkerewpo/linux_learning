@@ -29,3 +29,8 @@ clean:
 run:
 	sudo rm -rf /sys/fs/bpf/main
 	sudo bpftool prog load main.bpf.o /sys/fs/bpf/main
+
+monitor:
+# if /sys/kernel/debug/ is not mounted, mount it here
+#	sudo mount -t debugfs nodev /sys/kernel/debug
+	sudo cat /sys/kernel/debug/tracing/trace_pipe
