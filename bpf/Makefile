@@ -11,7 +11,7 @@ BPF_OBJS := $(BPF_SRCS:.bpf.c=.bpf.o)
 
 .PHONY: all clean
 
-all: vmlinux.h $(BPF_OBJS) disasm
+all: vmlinux.h $(BPF_OBJS) disasm ir
 
 %.bpf.o: %.bpf.c
 	$(CLANG) $(CFLAGS) -c $< -o $@
@@ -22,6 +22,9 @@ vmlinux.h:
 
 disasm: $(BPF_OBJS)
 	$(foreach obj, $(BPF_OBJS), llvm-objdump -S -D $(obj) > $(obj).disasm;)
+
+ir:
+	$(foreach src, $(BPF_SRCS), $(CLANG) $(CFLAGS) -S -emit-llvm $(src) -o $(src).ll;)
 
 clean:
 	rm -f $(BPF_OBJS)
