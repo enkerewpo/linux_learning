@@ -11,14 +11,14 @@ BPF_OBJS := $(BPF_SRCS:.bpf.c=.bpf.o)
 
 .PHONY: all clean
 
-all: vmlinux.h $(BPF_OBJS) disasm ir
+all: pre $(BPF_OBJS) disasm ir
 
 %.bpf.o: %.bpf.c
 	$(CLANG) $(CFLAGS) -c $< -o $@
 	$(LLVM_STRIP) -g $@
 
-vmlinux.h:
-	bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
+pre:
+	sudo bpftool btf dump file /sys/kernel/btf/vmlinux format c > vmlinux.h
 
 disasm: $(BPF_OBJS)
 	$(foreach obj, $(BPF_OBJS), llvm-objdump -S -D $(obj) > $(obj).disasm;)

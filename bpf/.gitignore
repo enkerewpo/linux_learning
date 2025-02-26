@@ -3,3 +3,4 @@ vmlinux.h
 *.ko
 *.mod.c
 *.disasm
+*.ll
